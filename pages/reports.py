@@ -64,7 +64,9 @@ def show():
             if report.get('details', {}).get('goals'):
                 st.subheader("🎯 Goals Progress")
                 for goal in report['details']['goals']:
-                    st.write(f"- **{goal['name']}:** {goal['progress_percent']:.1f}% ({format_currency(Decimal(str(goal['current'])))} / {format_currency(Decimal(str(goal['target'])))))")
+                    current = format_currency(Decimal(str(goal['current'])))
+                    target = format_currency(Decimal(str(goal['target'])))
+                    st.write(f"- **{goal['name']}:** {goal['progress_percent']:.1f}% ({current} / {target})")
             
             # AI Observations
             if report.get('ai_observations'):
