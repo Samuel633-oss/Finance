@@ -464,12 +464,13 @@ def get_allocation_settings(user_id: int) -> Optional[Dict]:
 
 def create_allocation_settings(user_id: int) -> int:
     """Create default allocation settings for a user."""
-    result = execute_query(
-        """INSERT INTO allocation_settings (user_id) 
-           VALUES (?)""",
-        (user_id,)
-    )
-    return result.lastrowid
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("""INSERT INTO allocation_settings (user_id) VALUES (?""", (user_id,))
+    user_id_result = cursor.lastrowid
+    conn.commit()
+    conn.close()
+    return user_id_result
 
 
 def update_allocation_settings(user_id: int, settings: Dict) -> bool:

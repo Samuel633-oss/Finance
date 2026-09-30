@@ -39,7 +39,11 @@ def calculate_net_worth(assets: List[Dict], liabilities: List[Dict]) -> Decimal:
     
     total_assets = sum(safe_decimal(asset.get('value', 0)) for asset in (assets or []))
     total_liabilities = sum(safe_decimal(liability.get('amount', 0)) for liability in (liabilities or []))
-    return (total_assets - total_liabilities).quantize(Decimal('0.01'))
+    result = total_assets - total_liabilities
+    # Ensure result is a Decimal before quantize
+    if not isinstance(result, Decimal):
+        result = Decimal(str(result))
+    return result.quantize(Decimal('0.01'))
 
 
 def calculate_budget_usage(budget: Decimal, actual: Decimal) -> Dict:
