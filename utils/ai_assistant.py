@@ -14,7 +14,7 @@ from .financial_calculations import (
 )
 from datetime import datetime, date
 
-# Try to import groq, but make it optional
+# Try to import groq and streamlit, but make them optional
 try:
     from groq import Groq
     GROQ_AVAILABLE = True
@@ -22,12 +22,22 @@ except ImportError:
     GROQ_AVAILABLE = False
     Groq = None
 
+try:
+    import streamlit as st
+    STREAMLIT_AVAILABLE = True
+except ImportError:
+    STREAMLIT_AVAILABLE = False
+
 
 class AIAssistant:
     """AI Assistant for financial analysis and advice."""
     
     def __init__(self):
-        self.api_key = os.environ.get('GROQ_API_KEY')
+        # Try Streamlit secrets first, then fall back to environment variable
+        if STREAMLIT_AVAILABLE:
+            self.api_key = st.secrets.get('GROQ_API_KEY', None)
+        else:
+            self.api_key = os.environ.get('GROQ_API_KEY')
         self.client = Groq(api_key=self.api_key) if GROQ_AVAILABLE and self.api_key else None
         self.system_prompt = """
 You are a helpful financial assistant. You provide accurate, practical financial advice based on the user's actual data.

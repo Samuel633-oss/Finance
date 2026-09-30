@@ -12,6 +12,14 @@ import sys
 # Add utils directory to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'utils'))
 
+# Initialize Streamlit secrets if not already done
+# This ensures secrets are available throughout the app
+if 'GROQ_API_KEY' not in os.environ:
+    try:
+        os.environ['GROQ_API_KEY'] = st.secrets['GROQ_API_KEY']
+    except:
+        pass
+
 # Import utilities
 from utils.database import (
     init_db, fetch_one, fetch_all, execute_query,

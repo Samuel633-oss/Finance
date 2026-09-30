@@ -27,6 +27,9 @@ def init_db():
     conn = get_db_connection()
     cursor = conn.cursor()
     
+    # Enable WAL mode for better SQLite performance
+    cursor.execute("PRAGMA journal_mode=WAL")
+    
     # Users table
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS users (
