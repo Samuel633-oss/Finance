@@ -195,7 +195,7 @@ Remember: Base your answers ONLY on the provided financial data. If you don't ha
             ]
             
             response = self.client.chat.completions.create(
-                model="llama-3.1-70b-versatile",
+                model="gpt-oss-120b",
                 messages=messages,
                 temperature=0.7,
                 max_tokens=2000,
@@ -497,7 +497,7 @@ Be educational and research-focused.
             ]
             
             response = self.client.chat.completions.create(
-                model="llama-3.1-70b-versatile",
+                model="gpt-oss-120b",
                 messages=messages,
                 temperature=0.3,  # Lower temperature for more factual responses
                 max_tokens=3000,
