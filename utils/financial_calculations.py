@@ -28,8 +28,17 @@ def calculate_allocation_amounts(amount: Decimal, allocation: Dict[str, Decimal]
 
 def calculate_net_worth(assets: List[Dict], liabilities: List[Dict]) -> Decimal:
     """Calculate net worth: Total Assets - Total Liabilities."""
-    total_assets = sum(Decimal(str(asset.get('value', 0))) if asset.get('value') else Decimal('0') for asset in assets)
-    total_liabilities = sum(Decimal(str(liability.get('amount', 0))) if liability.get('amount') else Decimal('0') for liability in liabilities)
+    def safe_decimal(value):
+        """Safely convert value to Decimal, handling None and other edge cases."""
+        if value is None:
+            return Decimal('0')
+        try:
+            return Decimal(str(value))
+        except (TypeError, ValueError, AttributeError):
+            return Decimal('0')
+    
+    total_assets = sum(safe_decimal(asset.get('value', 0)) for asset in (assets or []))
+    total_liabilities = sum(safe_decimal(liability.get('amount', 0)) for liability in (liabilities or []))
     return (total_assets - total_liabilities).quantize(Decimal('0.01'))
 
 
