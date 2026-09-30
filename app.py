@@ -112,6 +112,38 @@ import pages.settings
 import pages.login
 
 
+def show_navigation():
+    """Show navigation sidebar when authenticated."""
+    if check_auth():
+        with st.sidebar:
+            st.image("https://via.placeholder.com/100x100/667eea/ffffff?text=\U0001f4b0", width=100)
+            st.title("Finance App")
+            
+            st.markdown("---")
+            
+            # Navigation menu
+            page = st.selectbox(
+                "Navigate",
+                ["Dashboard", "Income", "Giving", "Expenses", "Budget", "Savings", 
+                 "Investments", "Assets", "Liabilities", "Goals", "Reports", 
+                 "AI Assistant", "Research", "Settings"],
+                index=0,
+                key="nav_select"
+            )
+            
+            st.markdown("---")
+            
+            # User info
+            user = st.session_state.current_user
+            st.markdown(f"**User:** {user['username']}")
+            
+            if st.button("\U0001f504 Logout", use_container_width=True):
+                logout()
+        
+        # Update page state
+        st.session_state.page = page.lower().replace(" ", "_")
+
+
 def main():
     """Main entry point."""
     if 'page' not in st.session_state:
@@ -125,6 +157,7 @@ def main():
     if st.session_state.page is None:
         if check_auth():
             st.session_state.page = "dashboard"
+            show_navigation()
             pages.dashboard.show()
         else:
             pages.login.show()
@@ -138,6 +171,7 @@ def main():
             st.session_state.page = "login"
             pages.login.show()
         else:
+            show_navigation()
             # Show the selected page
             page_mapping = {
                 "dashboard": pages.dashboard.show,
