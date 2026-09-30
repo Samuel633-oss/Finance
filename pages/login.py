@@ -19,9 +19,12 @@ def show():
         with col1:
             submit_btn = st.form_submit_button("Login", key="login_submit")
         with col2:
-            if st.button("Create Account", key="create_account_btn"):
-                st.session_state.page = "register"
-                st.rerun()
+            create_account_btn = st.form_submit_button("Create Account", key="create_account_btn")
+    
+    # Handle Create Account button
+    if 'create_account_btn' in st.session_state and st.session_state.create_account_btn:
+        st.session_state.page = "register"
+        st.rerun()
     
     if submit_btn:
         if username and password:
@@ -50,9 +53,12 @@ def show_register():
         with col1:
             submit_btn = st.form_submit_button("Create Account", key="reg_submit")
         with col2:
-            if st.button("Back to Login", key="back_login_btn"):
-                st.session_state.page = "login"
-                st.rerun()
+            back_login_btn = st.form_submit_button("Back to Login", key="back_login_btn")
+    
+    # Handle Back to Login button
+    if 'back_login_btn' in st.session_state and st.session_state.back_login_btn:
+        st.session_state.page = "login"
+        st.rerun()
     
     if submit_btn:
         if not username:
