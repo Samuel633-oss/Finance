@@ -38,7 +38,16 @@ class AIAssistant:
             self.api_key = st.secrets.get('GROQ_API_KEY', None)
         else:
             self.api_key = os.environ.get('GROQ_API_KEY')
-        self.client = Groq(api_key=self.api_key) if GROQ_AVAILABLE and self.api_key else None
+        
+        # Only create client if we have an API key and Groq is available
+        if GROQ_AVAILABLE and self.api_key:
+            try:
+                self.client = Groq(api_key=self.api_key)
+            except Exception as e:
+                print(f"Warning: Could not initialize Groq client: {e}")
+                self.client = None
+        else:
+            self.client = None
         self.system_prompt = """
 You are a helpful financial assistant. You provide accurate, practical financial advice based on the user's actual data.
 
