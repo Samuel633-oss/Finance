@@ -28,8 +28,8 @@ def calculate_allocation_amounts(amount: Decimal, allocation: Dict[str, Decimal]
 
 def calculate_net_worth(assets: List[Dict], liabilities: List[Dict]) -> Decimal:
     """Calculate net worth: Total Assets - Total Liabilities."""
-    total_assets = sum(Decimal(str(asset.get('value', 0))) for asset in assets)
-    total_liabilities = sum(Decimal(str(liability.get('amount', 0))) for liability in liabilities)
+    total_assets = sum(Decimal(str(asset.get('value', 0))) if asset.get('value') else Decimal('0') for asset in assets)
+    total_liabilities = sum(Decimal(str(liability.get('amount', 0))) if liability.get('amount') else Decimal('0') for liability in liabilities)
     return (total_assets - total_liabilities).quantize(Decimal('0.01'))
 
 
